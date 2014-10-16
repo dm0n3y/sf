@@ -1231,7 +1231,7 @@ Theorem override_permute : forall (X:Type) x1 x2 k1 k2 k3 (f : nat->X),
   beq_nat k2 k1 = false ->
   (override (override f k2 x2) k1 x1) k3 = (override (override f k1 x1) k2 x2) k3.
 Proof.
-  Abort.
+  Admitted.
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (filter_exercise) *)
@@ -1242,8 +1242,9 @@ Theorem filter_exercise : forall (X : Type) (test : X -> bool)
      filter test l = x :: lf ->
      test x = true.
 Proof.
-  Abort.
+  Admitted.
 (** [] *)
+
 
 (** **** Exercise: 4 stars, advanced (forall_exists_challenge) *)
 (** Define two recursive [Fixpoints], [forallb] and [existsb].  The
