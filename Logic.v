@@ -680,8 +680,74 @@ Definition de_morgan_not_and_not := forall P Q:Prop,
 Definition implies_to_or := forall P Q:Prop, 
   (P->Q) -> (~P\/Q). 
 
+Theorem peirce__classic :
+  (forall (P Q : Prop), ((P -> Q) -> P) -> P) ->
+    (forall (P : Prop), ~~P -> P).
+Proof.
+  unfold not.
+  intros.
+  apply H with (Q := False).
+  intros.
+  apply H0 in H1.
+  inversion H1.
+Qed.
 
+Theorem classic__excluded_middle : 
+  (forall (P : Prop), ~~P -> P) ->
+    (forall (P : Prop), P \/ ~P).
+Proof.
+  intros.
+  unfold not in *.
+  assert (H' : ((P \/ (P -> False)) -> False) -> False).
+    intros.
+    apply H0, or_introl, H.
+    intros.
+    apply H0, or_intror, H1.
+  apply H.
+  assumption.
+Qed.
 
+Theorem excluded_middle__de_morgan : 
+  (forall (P : Prop), P \/ ~P) ->
+    (forall (P Q : Prop), ~(~P /\ ~Q) -> P \/ Q).
+Proof.
+  intros.
+  unfold not in *.
+  assert ((P \/ Q -> False) -> False).
+    intros.
+    apply H0.
+    Hint Constructors or.
+    split; auto.
+  destruct (H (P \/ Q)).
+  - assumption.
+  - specialize H with (P := P \/ Q).
+    inversion H; contradiction.
+Qed.
+
+Theorem de_morgan__implies_to_or : 
+  (forall (P Q : Prop), ~(~P /\ ~Q) -> P \/ Q) ->
+    (forall (P Q : Prop), (P -> Q) -> (~P \/ Q)). 
+Proof.
+  intros.
+  unfold not in *.
+  apply H.
+  intros.
+  destruct H1.
+  apply H1.
+  apply (contrapositive P Q H0 H2).
+Qed.
+
+Theorem implies_to_or__peirce : 
+  (forall (P Q : Prop), (P -> Q) -> (~P \/ Q)) ->
+    (forall (P Q : Prop), ((P -> Q) -> P) -> P).
+Proof.
+  intros.
+  destruct (H P P); intros; try assumption.
+  apply H0.
+  intros.
+  apply H1 in H2.
+  inversion H2.
+Qed.
 
 (** [] *)
 
