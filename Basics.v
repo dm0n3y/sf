@@ -950,6 +950,27 @@ Qed.
 
 Inductive bin : Type :=
   | Z : bin
+  | T : bin -> bin
+  | P : bin -> bin.
+
+Fixpoint inc (b : bin) := 
+  match b with
+    | Z    => P Z
+    | T b' => P b'
+    | P b' => T (inc b')
+  end.
+
+Fixpoint convert_b_u (b : bin) : nat :=
+  match b with
+    | Z    => O
+    | T b' => plus (convert_b_u b') (convert_b_u b')
+    | P b' => S (plus (convert_b_u b') (convert_b_u b'))
+  end.
+
+
+(* 
+Inductive bin : Type :=
+  | Z : bin
   | P : bin -> bin
   | T : bin -> bin.
 
@@ -970,6 +991,7 @@ Proof.
   intros.
   destruct b; reflexivity.
   Qed.
+*)
 
 (** [] *)
 

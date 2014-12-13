@@ -681,10 +681,9 @@ Definition implies_to_or := forall P Q:Prop,
   (P->Q) -> (~P\/Q). 
 
 Theorem peirce__classic :
-  (forall (P Q : Prop), ((P -> Q) -> P) -> P) ->
-    (forall (P : Prop), ~~P -> P).
+  peirce -> classic.
 Proof.
-  unfold not.
+  unfold peirce, classic, not.
   intros.
   apply H with (Q := False).
   intros.
@@ -693,11 +692,10 @@ Proof.
 Qed.
 
 Theorem classic__excluded_middle : 
-  (forall (P : Prop), ~~P -> P) ->
-    (forall (P : Prop), P \/ ~P).
+  classic -> excluded_middle.
 Proof.
+  unfold classic, excluded_middle, not.
   intros.
-  unfold not in *.
   assert (H' : ((P \/ (P -> False)) -> False) -> False).
     intros.
     apply H0, or_introl, H.
@@ -708,11 +706,10 @@ Proof.
 Qed.
 
 Theorem excluded_middle__de_morgan : 
-  (forall (P : Prop), P \/ ~P) ->
-    (forall (P Q : Prop), ~(~P /\ ~Q) -> P \/ Q).
+  excluded_middle -> de_morgan_not_and_not.
 Proof.
+  unfold excluded_middle, de_morgan_not_and_not, not.
   intros.
-  unfold not in *.
   assert ((P \/ Q -> False) -> False).
     intros.
     apply H0.
@@ -725,11 +722,10 @@ Proof.
 Qed.
 
 Theorem de_morgan__implies_to_or : 
-  (forall (P Q : Prop), ~(~P /\ ~Q) -> P \/ Q) ->
-    (forall (P Q : Prop), (P -> Q) -> (~P \/ Q)). 
+  de_morgan_not_and_not -> implies_to_or.
 Proof.
+  unfold de_morgan_not_and_not, implies_to_or, not.
   intros.
-  unfold not in *.
   apply H.
   intros.
   destruct H1.
@@ -738,9 +734,9 @@ Proof.
 Qed.
 
 Theorem implies_to_or__peirce : 
-  (forall (P Q : Prop), (P -> Q) -> (~P \/ Q)) ->
-    (forall (P Q : Prop), ((P -> Q) -> P) -> P).
+  implies_to_or -> peirce.
 Proof.
+  unfold implies_to_or, peirce, not.
   intros.
   destruct (H P P); intros; try assumption.
   apply H0.

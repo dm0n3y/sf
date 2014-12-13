@@ -204,8 +204,8 @@ Abort.
 Theorem plus_0_r : forall n:nat, n + 0 = n.
 Proof.
   intros n. induction n as [| n'].
-  Case "n = 0".     reflexivity.
-  Case "n = S n'".  simpl. rewrite -> IHn'. reflexivity.  Qed.
+  - reflexivity.
+  - simpl. rewrite -> IHn'. reflexivity.  Qed.
 
 (** Like [destruct], the [induction] tactic takes an [as...]
     clause that specifies the names of the variables to be introduced
