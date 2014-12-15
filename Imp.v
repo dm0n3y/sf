@@ -1310,13 +1310,13 @@ Inductive com : Type :=
   | CAss : id -> aexp -> com
   | CSeq : com -> com -> com
   | CIf : bexp -> com -> com -> com
-  | CWhile : bexp -> com -> com
-  | CFor : com -> bexp -> com -> com -> com.
+  | CWhile : bexp -> com -> com.
+(*  | CFor : com -> bexp -> com -> com -> com. *)
 
 Tactic Notation "com_cases" tactic(first) ident(c) :=
   first;
   [ Case_aux c "SKIP" | Case_aux c "::=" | Case_aux c ";;"
-  | Case_aux c "IFB" | Case_aux c "WHILE" | Case_aux c "FOR" ].
+  | Case_aux c "IFB" | Case_aux c "WHILE" ]. (* Case_aux c "FOR" ].*)
 
 (** As usual, we can use a few [Notation] declarations to make things
     more readable.  We need to be a bit careful to avoid conflicts
@@ -1336,8 +1336,8 @@ Notation "'WHILE' b 'DO' c 'END'" :=
   (CWhile b c) (at level 80, right associativity).
 Notation "'IFB' c1 'THEN' c2 'ELSE' c3 'FI'" :=
   (CIf c1 c2 c3) (at level 80, right associativity).
-Notation "'FOR' ( init_com , test , inc ) 'DO' body 'END'" :=
-  (CFor init_com test inc body) (at level 80, right associativity).
+(* Notation "'FOR' ( init_com , test , inc ) 'DO' body 'END'" :=
+  (CFor init_com test inc body) (at level 80, right associativity). *)
 
 (** For example, here is the factorial function again, written as a
     formal definition to Coq: *)
@@ -1414,9 +1414,9 @@ Fixpoint ceval_fun_no_while (st : state) (c : com) : state :=
           else ceval_fun_no_while st c2
     | WHILE b DO c END =>
         st  (* bogus *)
-    | FOR (init, test, inc) DO body END => 
-        st
-  end.
+(*    | FOR (init, test, inc) DO body END => 
+        st *)
+  end. 
 (** In a traditional functional programming language like ML or
     Haskell we could write the [WHILE] case as follows:
 <<
@@ -1771,7 +1771,7 @@ Fixpoint no_whiles (c : com) : bool :=
   | c1 ;; c2  => andb (no_whiles c1) (no_whiles c2)
   | IFB _ THEN ct ELSE cf FI => andb (no_whiles ct) (no_whiles cf)
   | WHILE _ DO _ END  => false
-  | FOR (_, _, _) DO _ END => false
+(*  | FOR (_, _, _) DO _ END => false *)
   end.
 
 (** This property yields [true] just on programs that
