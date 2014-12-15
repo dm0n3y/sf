@@ -1535,10 +1535,12 @@ Inductive ceval : com -> state -> state -> Prop :=
       c / st || st' ->
       (WHILE b DO c END) / st' || st'' ->
       (WHILE b DO c END) / st || st''
+(*
   | E_For : forall test st st' st'' init inc c,
        init / st || st' ->
        WHILE test DO (c ;; inc) END / st' || st'' ->
        FOR (init, test, inc) DO c END / st || st''
+*)
 
   where "c1 '/' st '||' st'" := (ceval c1 st st').
 
@@ -1546,8 +1548,8 @@ Tactic Notation "ceval_cases" tactic(first) ident(c) :=
   first;
   [ Case_aux c "E_Skip" | Case_aux c "E_Ass" | Case_aux c "E_Seq"
   | Case_aux c "E_IfTrue" | Case_aux c "E_IfFalse"
-  | Case_aux c "E_WhileEnd" | Case_aux c "E_WhileLoop" 
-  | Case_aux c "E_For" ].
+  | Case_aux c "E_WhileEnd" | Case_aux c "E_WhileLoop" ].
+(*  | Case_aux c "E_For" ]. *)
 
 (** *** *)
 (** The cost of defining evaluation as a relation instead of a
@@ -1657,9 +1659,11 @@ Proof.
   - Case "E_WhileLoop".
     assert (st' = st'0) by auto; subst.
     auto.
+(*
   - Case "E_For".
     assert (st' = st'0) by auto; subst.
     auto.
+*)
 Qed.
 
 (*
